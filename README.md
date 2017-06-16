@@ -1,4 +1,4 @@
-Select2
+Select2 (fork)
 =======
 [![Build Status][travis-ci-image]][travis-ci-status]
 
