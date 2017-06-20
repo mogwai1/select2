@@ -940,8 +940,18 @@ S2.define('select2/results',[
   };
 
   Results.prototype.option = function (data) {
-    var option = document.createElement('li');
-    option.className = 'select2-results__option';
+    var option;
+    var append = false;
+    if (data.children) {
+      option = $(".select2-results__option[aria-label='" + data.text + "']")[0];
+      if ($(option).length !== 0) {
+        append = true;
+      }
+    }
+    if (!append) {
+        option = document.createElement('li');
+        option.className = 'select2-results__option';
+    }
 
     var attrs = {
       'role': 'treeitem',
@@ -996,14 +1006,21 @@ S2.define('select2/results',[
         $children.push($child);
       }
 
-      var $childrenContainer = $('<ul></ul>', {
-        'class': 'select2-results__options select2-results__options--nested'
-      });
+      var $childrenContainer;
+      if(append) {
+        $childrenContainer =  $option.find('.select2-results__options--nested');
+      }
+      else {
+        $childrenContainer =  $('<ul></ul>', {
+          'class': 'select2-results__options select2-results__options--nested'
+        });
+      }
 
       $childrenContainer.append($children);
-
-      $option.append(label);
-      $option.append($childrenContainer);
+      if (!append) {
+        $option.append(label);
+        $option.append($childrenContainer);
+      }
     } else {
       this.template(data, option);
     }
